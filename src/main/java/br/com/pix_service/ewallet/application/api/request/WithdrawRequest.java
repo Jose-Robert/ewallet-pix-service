@@ -6,12 +6,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Data
-public class WalletPixKeyRequest implements Serializable {
+public class WithdrawRequest implements Serializable {
 
-    private String pixKey;
+    private String walletId;
+    private BigDecimal amount;
 }
