@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: ewallet-pix-service
+  jpa:
+    open-in-view: false
+server:
+  servlet:
+    context-path: /api/v1
