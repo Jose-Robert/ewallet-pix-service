@@ -8,6 +8,7 @@ import br.com.pix_service.ewallet.application.api.response.WalletBalanceResponse
 import br.com.pix_service.ewallet.application.api.response.WalletPixKeyResponse;
 import br.com.pix_service.ewallet.application.api.response.WalletResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,13 +24,15 @@ public interface IWalletApi {
     @PostMapping(value = "/pix-keys")
     ResponseEntity<WalletPixKeyResponse> registerPixKey(@RequestBody PixKeyRequest pixKeyRequest);
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "Deposit Value", description = "Deposit funds into a wallet.")
-    @PostMapping(value = "/deposit")
-    ResponseEntity<Void> deposit(@RequestBody DepositRequest depositRequest);
+    @PostMapping(value = "/deposits")
+    void deposit(@RequestBody DepositRequest depositRequest);
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "Withdraw Value", description = "Withdraw funds from a wallet.")
-    @PostMapping(value = "/withdraw")
-    ResponseEntity<Void> withdraw(@RequestBody WithdrawRequest withdrawRequest);
+    @PostMapping(value = "/withdrawals")
+    void withdraw(@RequestBody WithdrawRequest withdrawRequest);
 
     @Operation(summary = "Get Current Balance", description = "Retrieve the current balance of a wallet.")
     @GetMapping(value = "/{walletId}/balance")
