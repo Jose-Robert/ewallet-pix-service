@@ -4,6 +4,7 @@ import br.com.pix_service.ewallet.domain.entity.TransactionEntity;
 import br.com.pix_service.ewallet.infrastructure.persistence.SpecificationOperation;
 import br.com.pix_service.ewallet.infrastructure.specification.SpecificationEntity;
 import br.com.pix_service.ewallet.infrastructure.specification.SpecificationField;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -13,9 +14,11 @@ import java.time.LocalDateTime;
 @SpecificationEntity(value = TransactionEntity.class)
 public class TransactionFilterTO {
 
+    @Schema(description = "Wallet ID associated with the transaction", example = "123e4567-e89b-12d3-a456-426614174000")
     @SpecificationField(property = "walletId", operation = SpecificationOperation.LIKE)
     private String walletId;
 
+    @Schema(description = "Transaction type (e.g., DEPOSIT, WITHDRAWAL)", example = "DEPOSIT")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @SpecificationField(property = "createdAt", operation = SpecificationOperation.GREATER_THAN_OR_EQUAL)
     private LocalDateTime createdAt;

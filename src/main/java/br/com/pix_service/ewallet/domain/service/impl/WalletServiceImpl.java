@@ -1,6 +1,5 @@
 package br.com.pix_service.ewallet.domain.service.impl;
 
-import br.com.pix_service.ewallet.application.api.filter.TransactionFilterTO;
 import br.com.pix_service.ewallet.application.api.request.DepositRequest;
 import br.com.pix_service.ewallet.application.api.request.PixKeyRequest;
 import br.com.pix_service.ewallet.application.api.request.WalletRequest;
@@ -15,8 +14,8 @@ import br.com.pix_service.ewallet.domain.entity.TransactionEntity;
 import br.com.pix_service.ewallet.domain.entity.WalletEntity;
 import br.com.pix_service.ewallet.domain.enums.TransactionType;
 import br.com.pix_service.ewallet.domain.mapper.GenericMapper;
-import br.com.pix_service.ewallet.domain.service.IWalletService;
 import br.com.pix_service.ewallet.domain.service.ITransactionService;
+import br.com.pix_service.ewallet.domain.service.IWalletService;
 import br.com.pix_service.ewallet.infrastructure.exceptions.InvalidArgumentException;
 import br.com.pix_service.ewallet.infrastructure.repository.IWalletRepository;
 import jakarta.transaction.Transactional;
@@ -27,6 +26,9 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
+
+import static br.com.pix_service.ewallet.infrastructure.utils.Utils.cleanCPFAndPhone;
+import static br.com.pix_service.ewallet.infrastructure.utils.Utils.formatAndMaskCpf;
 
 @Service
 @AllArgsConstructor
@@ -39,13 +41,18 @@ public class WalletServiceImpl implements IWalletService {
 
     @Override
     public WalletResponse openWallet(WalletRequest walletRequest) {
+        walletRequest.setCpf(cleanCPFAndPhone(walletRequest.getCpf()));
         var walletEntity = genericMapper.map(walletRequest, WalletEntity.class);
         walletEntity.setBalance(new BigDecimal("0.00"));
-        return genericMapper.map(walletRepository.save(walletEntity), WalletResponse.class);
+        var walletSaved = walletRepository.save(walletEntity);
+        var response = genericMapper.map(walletSaved, WalletResponse.class);
+        response.setCpf(formatAndMaskCpf(response.getCpf()));
+        return response;
     }
 
     @Override
     public WalletPixKeyResponse registerPixKey(PixKeyRequest pixKeyRequest) {
+        pixKeyRequest.setPixKey(cleanCPFAndPhone(pixKeyRequest.getPixKey()));
         var entity = this.findWalletById(UUID.fromString(pixKeyRequest.getWalletId()));
         entity.setPixKey(pixKeyRequest.getPixKey());
         return genericMapper.map(walletRepository.save(entity), WalletPixKeyResponse.class);
