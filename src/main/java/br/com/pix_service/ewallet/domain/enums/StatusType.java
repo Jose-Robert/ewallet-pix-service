@@ -1,6 +1,6 @@
 package br.com.pix_service.ewallet.domain.enums;
 
-public enum Status {
+public enum StatusType {
     PENDING,
     CONFIRMED,
     REJECTED

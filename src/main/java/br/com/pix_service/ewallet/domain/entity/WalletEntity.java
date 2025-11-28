@@ -1,5 +1,6 @@
 package br.com.pix_service.ewallet.domain.entity;
 
+import br.com.pix_service.ewallet.domain.enums.KeyType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -36,5 +37,13 @@ public class WalletEntity implements Serializable {
 
     @Column(name = "pix_key")
     private String pixKey;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "key_type")
+    private KeyType keyType;
+
+    @Version
+    @Column(name = "version", nullable = false, columnDefinition = "INTEGER DEFAULT 0")
+    protected Integer version;
 
 }

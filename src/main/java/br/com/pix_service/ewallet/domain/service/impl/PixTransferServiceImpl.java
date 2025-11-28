@@ -5,10 +5,11 @@ import br.com.pix_service.ewallet.application.api.request.PixWebhookEventRequest
 import br.com.pix_service.ewallet.application.api.response.PixTransferResponse;
 import br.com.pix_service.ewallet.domain.dto.TransactionTO;
 import br.com.pix_service.ewallet.domain.entity.WalletEntity;
-import br.com.pix_service.ewallet.domain.enums.Status;
+import br.com.pix_service.ewallet.domain.enums.StatusType;
 import br.com.pix_service.ewallet.domain.service.IPixTransferService;
 import br.com.pix_service.ewallet.domain.service.ITransactionService;
-import br.com.pix_service.ewallet.infrastructure.exceptions.InvalidArgumentException;
+import br.com.pix_service.ewallet.infrastructure.handler.exceptions.ObjectNotFoundException;
+import br.com.pix_service.ewallet.infrastructure.handler.exceptions.PixTransferSameWalletException;
 import br.com.pix_service.ewallet.infrastructure.repository.IWalletRepository;
 import br.com.pix_service.ewallet.infrastructure.utils.EndToEndIdGeneratorUtils;
 import jakarta.transaction.Transactional;
@@ -35,7 +36,7 @@ public class PixTransferServiceImpl implements IPixTransferService {
     @Override
     public PixTransferResponse transferPix(PixTransferRequest pixTransferRequest, String idempotencyKey) {
         var transaction = transactionService.getTransactionByIdempotencyKey(idempotencyKey);
-        if (transaction != null && (transaction.getStatus() == Status.CONFIRMED || transaction.getStatus() == Status.PENDING)) {
+        if (transaction != null && (transaction.getStatus() == StatusType.CONFIRMED || transaction.getStatus() == StatusType.PENDING)) {
             return PixTransferResponse.builder()
                     .endToEndId(transaction.getEndToEndId())
                     .status(transaction.getStatus().name())
@@ -52,29 +53,25 @@ public class PixTransferServiceImpl implements IPixTransferService {
 
             var toWallet = this.findWalletByPixKey(pixTransferRequest.getToPixKey());
             toWallet.setBalance(toWallet.getBalance().add(pixTransferRequest.getAmount()));
+
+            if (fromWallet.getId().equals(toWallet.getId())) {
+                throw new PixTransferSameWalletException("Cannot transfer to the same wallet");
+            }
+
             walletRepository.save(fromWallet);
             walletRepository.save(toWallet);
 
-            transactionService.saveTransaction(TransactionTO.builder()
-                    .id(UUID.randomUUID())
-                    .walletId(fromWallet.getId().toString())
-                    .toWalletId(toWallet.getId().toString())
-                    .type(PIX_TRANSFER)
-                    .amount(pixTransferRequest.getAmount())
-                    .endToEndId(endToEndId)
-                    .status(Status.CONFIRMED)
-                    .idempotencyKey(idempotencyKey)
-                    .build());
+            saveTransactions(pixTransferRequest, idempotencyKey, fromWallet, toWallet, endToEndId);
             return PixTransferResponse.builder()
                     .endToEndId(endToEndId)
-                    .status(Status.CONFIRMED.name())
+                    .status(StatusType.CONFIRMED.name())
                     .build();
 
         } catch (Exception e) {
             log.info("Pix transfer rejected: {}", e.getMessage());
             return PixTransferResponse.builder()
                     .endToEndId(endToEndId)
-                    .status(Status.REJECTED.name())
+                    .status(StatusType.REJECTED.name())
                     .build();
         }
 
@@ -85,11 +82,24 @@ public class PixTransferServiceImpl implements IPixTransferService {
         // Implement the logic to handle the Pix webhook event
     }
 
+    private void saveTransactions(PixTransferRequest pixTransferRequest, String idempotencyKey, WalletEntity fromWallet, WalletEntity toWallet, String endToEndId) {
+        transactionService.saveTransaction(TransactionTO.builder()
+                .id(UUID.randomUUID())
+                .walletId(fromWallet.getId().toString())
+                .toWalletId(toWallet.getId().toString())
+                .type(PIX_TRANSFER)
+                .amount(pixTransferRequest.getAmount())
+                .endToEndId(endToEndId)
+                .status(StatusType.CONFIRMED)
+                .idempotencyKey(idempotencyKey)
+                .build());
+    }
+
     private WalletEntity findWalletById(UUID walletId) {
-        return walletRepository.findById(walletId).orElseThrow(() -> new InvalidArgumentException("Wallet not found"));
+        return walletRepository.findById(walletId).orElseThrow(() -> new ObjectNotFoundException("Wallet not found"));
     }
 
     private WalletEntity findWalletByPixKey(String pixKey) {
-        return walletRepository.findByPixKey(pixKey).orElseThrow(() -> new InvalidArgumentException("Wallet not found for the given Pix key"));
+        return walletRepository.findByPixKey(pixKey).orElseThrow(() -> new ObjectNotFoundException("Wallet not found for the given Pix key"));
     }
 }

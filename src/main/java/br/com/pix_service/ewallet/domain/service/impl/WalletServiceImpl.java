@@ -16,7 +16,7 @@ import br.com.pix_service.ewallet.domain.enums.TransactionType;
 import br.com.pix_service.ewallet.domain.mapper.GenericMapper;
 import br.com.pix_service.ewallet.domain.service.ITransactionService;
 import br.com.pix_service.ewallet.domain.service.IWalletService;
-import br.com.pix_service.ewallet.infrastructure.exceptions.InvalidArgumentException;
+import br.com.pix_service.ewallet.infrastructure.handler.exceptions.ObjectNotFoundException;
 import br.com.pix_service.ewallet.infrastructure.repository.IWalletRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static br.com.pix_service.ewallet.infrastructure.utils.Utils.*;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Service
 @AllArgsConstructor
@@ -51,13 +52,16 @@ public class WalletServiceImpl implements IWalletService {
 
     @Override
     public WalletPixKeyResponse registerPixKey(PixKeyRequest pixKeyRequest) {
-        pixKeyRequest.setPixKey(cleanCPFAndPhone(pixKeyRequest.getPixKey()));
+        if (!isBlank(pixKeyRequest.getKeyType()) && pixKeyRequest.getKeyType().equalsIgnoreCase("PHONE")) {
+            pixKeyRequest.setPixKey(cleanCPFAndPhone(pixKeyRequest.getPixKey()));
+        }
+
         var entity = this.findWalletById(UUID.fromString(pixKeyRequest.getWalletId()));
         entity.setPixKey(pixKeyRequest.getPixKey());
         return genericMapper.map(walletRepository.save(entity), WalletPixKeyResponse.class);
     }
 
-    @Transactional
+    @Transactional(rollbackOn = Exception.class)
     @Override
     public void deposit(DepositRequest depositRequest) {
         var entity = this.findWalletById(UUID.fromString(depositRequest.getWalletId()));
@@ -75,7 +79,7 @@ public class WalletServiceImpl implements IWalletService {
         transactionService.saveTransaction(transactionTO);
     }
 
-    @Transactional
+    @Transactional(rollbackOn = Exception.class)
     @Override
     public void withdraw(WithdrawRequest withdrawRequest) {
         var entity = this.findWalletById(UUID.fromString(withdrawRequest.getWalletId()));
@@ -86,6 +90,7 @@ public class WalletServiceImpl implements IWalletService {
         validCurrentBalance(balance);
         entity.setBalance(balance);
         walletRepository.save(entity);
+
         var transactionTO = TransactionTO.builder()
                 .id(UUID.randomUUID())
                 .walletId(withdrawRequest.getWalletId())
@@ -110,6 +115,6 @@ public class WalletServiceImpl implements IWalletService {
     }
 
     private WalletEntity findWalletById(UUID walletId) {
-        return walletRepository.findById(walletId).orElseThrow(() -> new InvalidArgumentException("Wallet not found"));
+        return walletRepository.findById(walletId).orElseThrow(() -> new ObjectNotFoundException("Wallet not found"));
     }
 }

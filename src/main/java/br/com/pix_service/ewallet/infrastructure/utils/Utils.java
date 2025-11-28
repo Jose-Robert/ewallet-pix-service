@@ -1,6 +1,7 @@
 package br.com.pix_service.ewallet.infrastructure.utils;
 
-import br.com.pix_service.ewallet.infrastructure.exceptions.InvalidArgumentException;
+import br.com.pix_service.ewallet.infrastructure.handler.exceptions.BalanceInsufficientException;
+import br.com.pix_service.ewallet.infrastructure.handler.exceptions.InvalidArgumentException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.util.ObjectUtils;
@@ -49,13 +50,13 @@ public class Utils {
 
     public static void validateInputAmount(BigDecimal amount) {
         if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new InvalidArgumentException("Invalid deposit amount");
+            throw new InvalidArgumentException("Invalid amount value");
         }
     }
 
     public static void validCurrentBalance(BigDecimal balance) {
         if (balance.compareTo(BigDecimal.ZERO) < 0) {
-            throw new InvalidArgumentException("Insufficient funds for withdrawal");
+            throw new BalanceInsufficientException("Insufficient balance for this operation");
         }
     }
 

@@ -1,6 +1,6 @@
 package br.com.pix_service.ewallet.domain.entity;
 
-import br.com.pix_service.ewallet.domain.enums.Status;
+import br.com.pix_service.ewallet.domain.enums.StatusType;
 import br.com.pix_service.ewallet.domain.enums.TransactionType;
 import jakarta.persistence.*;
 import lombok.*;
@@ -39,7 +39,8 @@ public class TransactionEntity implements Serializable {
     private String endToEndId;
 
     @Enumerated(EnumType.STRING)
-    private Status status;
+    @Column(name = "status_type")
+    private StatusType status;
 
     private String toWalletId;
 

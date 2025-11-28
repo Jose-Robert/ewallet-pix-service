@@ -1,6 +1,6 @@
 package br.com.pix_service.ewallet.domain.dto;
 
-import br.com.pix_service.ewallet.domain.enums.Status;
+import br.com.pix_service.ewallet.domain.enums.StatusType;
 import br.com.pix_service.ewallet.domain.enums.TransactionType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,7 +22,7 @@ public class TransactionTO implements Serializable {
     private TransactionType type;
     private BigDecimal amount;
     private String endToEndId;
-    private Status status;
+    private StatusType status;
     private String toWalletId;
     private String idempotencyKey;
 }
