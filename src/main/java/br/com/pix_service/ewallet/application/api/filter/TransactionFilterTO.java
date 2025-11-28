@@ -2,8 +2,8 @@ package br.com.pix_service.ewallet.application.api.filter;
 
 import br.com.pix_service.ewallet.domain.entity.TransactionEntity;
 import br.com.pix_service.ewallet.infrastructure.persistence.SpecificationOperation;
-import br.com.pix_service.ewallet.infrastructure.specification.SpecificationEntity;
-import br.com.pix_service.ewallet.infrastructure.specification.SpecificationField;
+import br.com.pix_service.ewallet.infrastructure.annotation.specification.SpecificationEntity;
+import br.com.pix_service.ewallet.infrastructure.annotation.specification.SpecificationField;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;

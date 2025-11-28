@@ -61,7 +61,7 @@ public class PixTransferServiceImpl implements IPixTransferService {
             walletRepository.save(fromWallet);
             walletRepository.save(toWallet);
 
-            saveTransactions(pixTransferRequest, idempotencyKey, fromWallet, toWallet, endToEndId);
+            this.saveTransactions(pixTransferRequest, idempotencyKey, fromWallet, toWallet, endToEndId);
             return PixTransferResponse.builder()
                     .endToEndId(endToEndId)
                     .status(StatusType.CONFIRMED.name())

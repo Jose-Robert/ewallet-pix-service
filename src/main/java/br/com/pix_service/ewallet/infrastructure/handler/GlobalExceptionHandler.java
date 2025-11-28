@@ -53,8 +53,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return handlerException(exception, HttpStatus.UNPROCESSABLE_ENTITY, request, "CANNOT.TRANSFER.SAME-WALLET", args);
     }
 
-    @ExceptionHandler({TooManyRequestsException.class})
-    public ResponseEntity<Object> handlerTooManyRequestsException(TooManyRequestsException exception, WebRequest request) {
+    @ExceptionHandler({RateLimitExceededException.class})
+    public ResponseEntity<Object> handlerRateLimitExceededException(RateLimitExceededException exception, WebRequest request) {
         Object[] args = {exception.getMessage()};
         return handlerException(exception, HttpStatus.TOO_MANY_REQUESTS, request, "RATE_LIMIT_EXCEEDED", args);
     }

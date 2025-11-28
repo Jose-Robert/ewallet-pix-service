@@ -1,7 +1,7 @@
 package br.com.pix_service.ewallet.infrastructure.persistence;
 
-import br.com.pix_service.ewallet.infrastructure.specification.SpecificationEntity;
-import br.com.pix_service.ewallet.infrastructure.specification.SpecificationField;
+import br.com.pix_service.ewallet.infrastructure.annotation.specification.SpecificationEntity;
+import br.com.pix_service.ewallet.infrastructure.annotation.specification.SpecificationField;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.Path;
 import jakarta.persistence.criteria.Predicate;
@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 @Slf4j

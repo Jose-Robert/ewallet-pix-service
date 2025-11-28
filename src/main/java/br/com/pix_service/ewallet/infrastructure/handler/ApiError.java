@@ -15,7 +15,7 @@ public class ApiError<T> implements Serializable {
 
 
     private List<String> errors = new ArrayList<>();
-    private String dataHora;
+    private String timestamp;
     private int statusCode;
 
     public ApiError() {
@@ -26,10 +26,10 @@ public class ApiError<T> implements Serializable {
         this.errors = errors;
     }
 
-    public String getDataHora() {
-        LocalDateTime dataAndHorario = LocalDateTime.now();
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-        dataHora = dateTimeFormatter.format(dataAndHorario);
-        return dataHora;
+    public String getTimestamp() {
+        var now = LocalDateTime.now();
+        var dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+        timestamp = dateTimeFormatter.format(now);
+        return timestamp;
     }
 }

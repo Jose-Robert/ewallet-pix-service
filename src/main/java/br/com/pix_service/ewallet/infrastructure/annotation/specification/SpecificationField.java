@@ -1,4 +1,4 @@
-package br.com.pix_service.ewallet.infrastructure.specification;
+package br.com.pix_service.ewallet.infrastructure.annotation.specification;
 
 
 import br.com.pix_service.ewallet.infrastructure.persistence.SpecificationOperation;
