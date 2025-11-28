@@ -5,6 +5,8 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.util.ObjectUtils;
 
+import java.math.BigDecimal;
+
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -42,6 +44,19 @@ public class Utils {
             throw new InvalidArgumentException("Invalid CPF length");
         }
         return cpf.replaceFirst("(\\d{3})(\\d{3})(\\d{3})(\\d{2})", "***.$2.$3-**");
+    }
+
+
+    public static void validateInputAmount(BigDecimal amount) {
+        if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new InvalidArgumentException("Invalid deposit amount");
+        }
+    }
+
+    public static void validCurrentBalance(BigDecimal balance) {
+        if (balance.compareTo(BigDecimal.ZERO) < 0) {
+            throw new InvalidArgumentException("Insufficient funds for withdrawal");
+        }
     }
 
 

@@ -27,8 +27,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
-import static br.com.pix_service.ewallet.infrastructure.utils.Utils.cleanCPFAndPhone;
-import static br.com.pix_service.ewallet.infrastructure.utils.Utils.formatAndMaskCpf;
+import static br.com.pix_service.ewallet.infrastructure.utils.Utils.*;
 
 @Service
 @AllArgsConstructor
@@ -63,7 +62,7 @@ public class WalletServiceImpl implements IWalletService {
     public void deposit(DepositRequest depositRequest) {
         var entity = this.findWalletById(UUID.fromString(depositRequest.getWalletId()));
         var amount = depositRequest.getAmount();
-        this.validateInputAmount(amount);
+        validateInputAmount(amount);
         var current = entity.getBalance() == null ? BigDecimal.ZERO : entity.getBalance();
         entity.setBalance(current.add(amount));
         walletRepository.save(entity);
@@ -81,10 +80,10 @@ public class WalletServiceImpl implements IWalletService {
     public void withdraw(WithdrawRequest withdrawRequest) {
         var entity = this.findWalletById(UUID.fromString(withdrawRequest.getWalletId()));
         var amount = withdrawRequest.getAmount();
-        this.validateInputAmount(amount);
+        validateInputAmount(amount);
         var currentAmount = entity.getBalance() == null ? BigDecimal.ZERO : entity.getBalance();
         var balance = currentAmount.subtract(amount);
-        this.validCurrentBalance(balance);
+        validCurrentBalance(balance);
         entity.setBalance(balance);
         walletRepository.save(entity);
         var transactionTO = TransactionTO.builder()
@@ -112,17 +111,5 @@ public class WalletServiceImpl implements IWalletService {
 
     private WalletEntity findWalletById(UUID walletId) {
         return walletRepository.findById(walletId).orElseThrow(() -> new InvalidArgumentException("Wallet not found"));
-    }
-
-    private void validateInputAmount(BigDecimal amount) {
-        if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new InvalidArgumentException("Invalid deposit amount");
-        }
-    }
-
-    private void validCurrentBalance(BigDecimal balance) {
-        if (balance.compareTo(BigDecimal.ZERO) < 0) {
-            throw new InvalidArgumentException("Insufficient funds for withdrawal");
-        }
     }
 }

@@ -37,4 +37,10 @@ public class TransactionServiceImpl implements ITransactionService {
                 .map(transaction -> genericMapper.map(transaction, TransactionItemTO.class))
                 .toList();
     }
+
+    @Override
+    public TransactionTO getTransactionByIdempotencyKey(String idempotencyKey) {
+        var entity = repository.findByIdempotencyKey(idempotencyKey);
+        return entity.isPresent() ? genericMapper.map(entity, TransactionTO.class) : null;
+    }
 }

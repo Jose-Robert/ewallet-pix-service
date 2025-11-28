@@ -13,7 +13,7 @@ import java.util.UUID;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-@Table(name = "wallet", schema = "public")
+@Table(name = "wallets", schema = "public")
 public class WalletEntity implements Serializable {
 
     @Id

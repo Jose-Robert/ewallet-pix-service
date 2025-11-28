@@ -11,4 +11,5 @@ public interface ITransactionService {
 
     void saveTransaction(TransactionTO transactionTO);
     List<TransactionItemTO> getHistoricalBalance(Specification<TransactionEntity> specification, int page, int size);
+    TransactionTO getTransactionByIdempotencyKey(String idempotencyKey);
 }
