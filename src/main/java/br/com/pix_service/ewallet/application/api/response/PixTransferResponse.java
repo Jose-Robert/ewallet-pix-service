@@ -17,6 +17,6 @@ public class PixTransferResponse implements Serializable {
     @Schema(description = "Identificador único da transação Pix", example = "E2E202511278B3F2A7E")
     private String endToEndId;
 
-    @Schema(description = "Status da transação Pix", example = "COMPLETED")
+    @Schema(description = "Status da transação Pix", example = "PENDING")
     private String status;
 }

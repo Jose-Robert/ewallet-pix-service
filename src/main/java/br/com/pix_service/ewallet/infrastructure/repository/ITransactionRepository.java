@@ -15,4 +15,5 @@ public interface ITransactionRepository extends JpaRepository<TransactionEntity,
 
     Page<TransactionEntity> findAll(Specification<TransactionEntity> specification, Pageable pageable);
     Optional<TransactionEntity> findByIdempotencyKey(String idempotencyKey);
+    Optional<TransactionEntity> findByEndToEndId(String endToEndId);
 }

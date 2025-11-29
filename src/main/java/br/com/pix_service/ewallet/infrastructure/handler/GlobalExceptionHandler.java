@@ -32,7 +32,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler({InvalidArgumentException.class})
     public ResponseEntity<Object> handlerInvalidArgumentException(InvalidArgumentException exception, WebRequest request) {
         Object[] args = {exception.getMessage()};
-        return handlerException(exception, HttpStatus.INTERNAL_SERVER_ERROR, request, "ERROR.INTERNAL", args);
+        return handlerException(exception, HttpStatus.BAD_REQUEST, request, "ERROR.BAD-REQUEST", args);
     }
 
     @ExceptionHandler({BalanceInsufficientException.class})

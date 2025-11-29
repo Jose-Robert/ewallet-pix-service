@@ -24,7 +24,8 @@ public class PixTransferController implements IPixTransfer {
     }
 
     @Override
-    public ResponseEntity<Void> pixWebhook(PixWebhookEventRequest pixWebhookEventRequest) {
+    public ResponseEntity<Void> processWebhook(PixWebhookEventRequest pixWebhookEventRequest) {
+        service.executeWebhook(pixWebhookEventRequest);
         return ResponseEntity.ok().build();
     }
 }

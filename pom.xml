@@ -74,7 +74,6 @@
 			<scope>runtime</scope>
 		</dependency>
 		<!-- bucket4j Integration -->
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-cache</artifactId>

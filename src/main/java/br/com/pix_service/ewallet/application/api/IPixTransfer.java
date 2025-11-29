@@ -20,5 +20,5 @@ public interface IPixTransfer {
 
     @Operation(summary = "Pix Webhook", description = "Handling Pix webhook events.")
     @PostMapping(path = "/pix/webhook")
-    ResponseEntity<Void> pixWebhook(@RequestBody PixWebhookEventRequest pixWebhookEventRequest);
+    ResponseEntity<Void> processWebhook(@RequestBody PixWebhookEventRequest pixWebhookEventRequest);
 }

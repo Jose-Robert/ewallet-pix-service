@@ -7,5 +7,5 @@ import br.com.pix_service.ewallet.application.api.response.PixTransferResponse;
 public interface IPixTransferService {
 
     PixTransferResponse transferPix(PixTransferRequest pixTransferRequest, String idempotencyKey);
-    void pixWebhook(PixWebhookEventRequest webhookEventRequest);
+    void executeWebhook(PixWebhookEventRequest webhookEventRequest);
 }

@@ -3,6 +3,7 @@ package br.com.pix_service.ewallet.domain.service.impl;
 import br.com.pix_service.ewallet.domain.dto.TransactionItemTO;
 import br.com.pix_service.ewallet.domain.dto.TransactionTO;
 import br.com.pix_service.ewallet.domain.entity.TransactionEntity;
+import br.com.pix_service.ewallet.domain.enums.StatusType;
 import br.com.pix_service.ewallet.domain.mapper.GenericMapper;
 import br.com.pix_service.ewallet.domain.service.ITransactionService;
 import br.com.pix_service.ewallet.infrastructure.repository.ITransactionRepository;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -42,5 +44,22 @@ public class TransactionServiceImpl implements ITransactionService {
     public TransactionTO getTransactionByIdempotencyKey(String idempotencyKey) {
         var entity = repository.findByIdempotencyKey(idempotencyKey);
         return entity.isPresent() ? genericMapper.map(entity, TransactionTO.class) : null;
+    }
+
+    @Override
+    public TransactionTO getTransactionByEndToEndId(String endToEndId) {
+        var entity = repository.findByEndToEndId(endToEndId);
+        return entity.isPresent() ? genericMapper.map(entity, TransactionTO.class) : null;
+    }
+
+    @Override
+    public void updateTransactionStatus(String endToEndId, String eventType, LocalDateTime occurredAt) {
+        var entity = repository.findByEndToEndId(endToEndId);
+        if (entity.isPresent()) {
+            var transactionUpdated = entity.get();
+            transactionUpdated.setStatus(StatusType.valueOf(eventType));
+            transactionUpdated.setCreatedAt(occurredAt);
+            repository.save(transactionUpdated);
+        }
     }
 }
