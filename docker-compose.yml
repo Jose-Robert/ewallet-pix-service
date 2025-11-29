@@ -1,0 +1,37 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: postgresql_16
+    restart: always
+    environment:
+      POSTGRES_DB: ewallet_pix_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4:9.4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "postgres@admin.com.br"
+      PGADMIN_DEFAULT_PASSWORD: "developer"
+    ports:
+      - "4000:80"
+  app:
+    build: .
+    container_name: ewallet-pix-service
+    restart: always
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/ewallet_pix_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: admin
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:
