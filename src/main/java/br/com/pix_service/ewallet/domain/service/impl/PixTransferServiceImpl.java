@@ -28,6 +28,7 @@ import java.util.UUID;
 import static br.com.pix_service.ewallet.domain.enums.TransactionType.PIX_TRANSFER;
 import static br.com.pix_service.ewallet.infrastructure.utils.Utils.validCurrentBalance;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Service
 @AllArgsConstructor
@@ -82,7 +83,7 @@ public class PixTransferServiceImpl implements IPixTransferService {
 
     @Override
     public void executeWebhook(PixWebhookEventRequest webhookEvent) {
-        if (webhookEvent.getEventId() == null) {
+        if (isBlank(webhookEvent.getEventId())) {
             throw new InvalidArgumentException("eventId is required");
         }
 

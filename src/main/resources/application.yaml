@@ -11,7 +11,7 @@ spring:
     open-in-view: false
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: none   # create | create-drop | update | none
+      ddl-auto: update   # create | create-drop | update | none
     properties:
       hibernate.connection.pool_size: 10
       hibernate:

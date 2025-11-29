@@ -47,6 +47,10 @@ public class TransactionEntity implements Serializable {
     @Column(unique = true)
     private String idempotencyKey;
 
+    @Version
+    @Column(name = "version", nullable = false, columnDefinition = "INTEGER DEFAULT 0")
+    protected Integer version;
+
     @PrePersist
     public void prePersist() {
         this.createdAt = LocalDateTime.now();

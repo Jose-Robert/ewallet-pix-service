@@ -11,6 +11,8 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import static org.apache.commons.lang3.StringUtils.isBlank;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -31,9 +33,15 @@ public class PixWebhookEventRequest implements Serializable {
     private LocalDateTime occurredAt;
 
     public String getEventId() {
+        if (!isBlank(eventId)) {
+            return this.eventId;
+        }
+        return this.generateEventID();
+    }
+
+    private String generateEventID() {
         var pattern = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
         var timestamp = LocalDateTime.now().format(pattern);
-        eventId = "EVT-" + timestamp;
-        return eventId;
+        return "EVT-" + timestamp;
     }
 }
