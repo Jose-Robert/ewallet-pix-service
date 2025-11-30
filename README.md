@@ -67,22 +67,31 @@ O serviço adota boas práticas como:
 ---
 
 ### ▶️ 1. Subir tudo via Docker
+- /{BASE_DIRECTORY}/ewallet-pix-service
 ```bash
 docker compose up --build
 ```
+Ou 
+
+```bash
+docker compose up -d
+```
 
 ### ▶️ 2. Executar localmente
+- /{BASE_DIRECTORY}/ewallet-pix-service
 ```bash
 mvn spring-boot:run
 ```
 
-### ▶️ 3. Baixar imagem publicada - DockerHub
+### ▶️ 3. Baixar imagem publicada - DockerHub e executar via .sh
 ```bash
 docker pull jsrobert10/ewallet-pix-service:1.0.0
 ```
 
+- /{BASE_DIRECTORY}/ewallet-pix-service
 ```bash
-docker run -d -p 8080:8080 jsrobert10/ewallet-pix-service:1.0.0
+chmod +x run_ewallet.sh
+./run_ewallet.sh
 ```
 
 ---
