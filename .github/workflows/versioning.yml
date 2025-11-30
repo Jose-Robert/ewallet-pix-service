@@ -1,0 +1,57 @@
+name: Automatic Versioning
+
+on:
+  push:
+    branches: ["main", "master"]
+
+permissions:
+  contents: write
+
+jobs:
+  bump-version:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Bump Version Based on Conventional Commits
+        id: version
+        uses: phips28/gh-action-bump-version@v10.1.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          commit-message: "chore(release): bump version to {{version}}"
+          tag-prefix: "v"
+          minor-wording: "feat"
+          major-wording: "BREAKING CHANGE"
+          patch-wording: "fix,docs,chore,refactor,test,style"
+
+      - name: Update version in pom.xml
+        run: |
+          VERSION=${{ steps.version.outputs.newTag }}
+          VERSION=${VERSION#v}
+
+          mvn -q versions:set -DnewVersion=$VERSION
+          mvn -q versions:commit
+
+          git config user.email "robert.suporteweb@gmail.com"
+          git config user.name "Jose-robert"
+
+          git add pom.xml
+          git commit -m "chore(version): update pom.xml to $VERSION"
+          git push
+
+      - name: Create Changelog
+        uses: scottbrenner/generate-changelog-action@v2
+        id: changelog
+
+      - name: Save Changelog
+        run: |
+          echo "${{ steps.changelog.outputs.changelog }}" > CHANGELOG.md
+          git add CHANGELOG.md
+          git commit -m "docs: update changelog"
+          git push
