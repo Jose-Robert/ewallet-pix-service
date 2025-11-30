@@ -18,7 +18,7 @@ public class TransactionFilterTO {
     @SpecificationField(property = "walletId", operation = SpecificationOperation.LIKE)
     private String walletId;
 
-    @Schema(description = "Timestamp indicating the earliest creation date of the transaction", example = "2024-06-15T14:30:00")
+    @Schema(description = "Timestamp indicating the earliest creation date of the transaction", example = "2024-06-15T14:30:00Z")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @SpecificationField(property = "createdAt", operation = SpecificationOperation.GREATER_THAN_OR_EQUAL)
     private LocalDateTime createdAt;

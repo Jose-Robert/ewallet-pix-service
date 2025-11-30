@@ -30,7 +30,7 @@ public interface IWalletApi {
     ResponseEntity<Object> deposit(@RequestBody DepositRequest depositRequest);
 
     @Operation(summary = "Withdraw Value", description = "Withdraw funds from a wallet.")
-    @PostMapping(value = "/withdrawals")
+    @PostMapping(value = "/withdraw")
     ResponseEntity<Object> withdraw(@RequestBody WithdrawRequest withdrawRequest);
 
     @Operation(summary = "Get Current Balance", description = "Retrieve the current balance of a wallet.")

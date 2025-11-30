@@ -14,9 +14,9 @@ public class PixKeyRequest implements Serializable {
     @Schema(description = "ID da carteira associada à chave Pix", example = "e7b8f8c2-3d4a-4f5b-9c6d-7e8f9a0b1c2d")
     private String walletId;
 
-    @Schema(description = "Chave Pix do titular da carteira", example = "(11) 91234-5678")
+    @Schema(description = "Chave Pix do titular da carteira", example = "11912345678")
     private String pixKey;
 
-    @Schema(description = "Tipo da chave Pix", example = "EMAIL/PHONE//EVP")
+    @Schema(description = "Tipo da chave Pix", example = "EMAIL/PHONE/EVP")
     private String keyType;
 }
