@@ -3,13 +3,34 @@ name: CI - Java + Maven + Docker Push
 on:
   push:
     branches: [ "main", "master" ]
+    tags:
+      - "v*.*.*"
   pull_request:
     branches: [ "main", "master" ]
+permissions:
+  contents: read
+  security-events: write
+  pull-requests: write
 
 jobs:
 
-  build-test-docker:
+  build-docker:
     runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_DB: ewallet_pix_db
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: admin
+        options: >-
+          --health-cmd="pg_isready -U test -d ewallet_pix_db"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=10
 
     steps:
       # -----------------------
