@@ -1,4 +1,4 @@
-name: CI Advanced - Java + Maven + Docker + Sonar + Trivy
+name: CI Advanced - Java + Maven + Docker + Trivy
 
 on:
   push:
