@@ -46,7 +46,7 @@ jobs:
           git push
 
       - name: Create Changelog
-        uses: scottbrenner/generate-changelog-action@v2
+        uses: scottbrenner/generate-changelog-action@v1
         id: changelog
 
       - name: Save Changelog
