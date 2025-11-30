@@ -54,6 +54,7 @@ O serviço adota boas práticas como:
 - **Bucket4j (Rate Limiter)**
 - **Swagger / OpenAPI 3**
 - **PGAdmin**
+- **JUnit**
 
 ---
 
@@ -124,7 +125,7 @@ chmod +x run_ewallet.sh
 ## 👤 Autor
 
 José Robert
-- GitHub: https://github.com/Jose-Robert ![GitHub](https://img.shields.io/badge/GitHub-000?logo=github&logoColor=white)
-- DockerHub: jsrobert10/ewallet-pix-service ![DockerHub](https://img.shields.io/badge/DockerHub-0db7ed?logo=docker&logoColor=white)
-- LinkdIn: https://www.linkedin.com/in/joserobertgoncalves/ ![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?logo=linkedin&logoColor=white)
+- **GitHub:** https://github.com/Jose-Robert ![GitHub](https://img.shields.io/badge/GitHub-000?logo=github&logoColor=white)
+- **DockerHub:** jsrobert10/ewallet-pix-service ![DockerHub](https://img.shields.io/badge/DockerHub-0db7ed?logo=docker&logoColor=white)
+- **LinkdIn:** https://www.linkedin.com/in/joserobertgoncalves/ ![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?logo=linkedin&logoColor=white)
 

@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import org.hibernate.ObjectNotFoundException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
 @ControllerAdvice
@@ -57,6 +59,18 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handlerRateLimitExceededException(RateLimitExceededException exception, WebRequest request) {
         Object[] args = {exception.getMessage()};
         return handlerException(exception, HttpStatus.TOO_MANY_REQUESTS, request, "RATE_LIMIT_EXCEEDED", args);
+    }
+
+    @ExceptionHandler({SQLIntegrityConstraintViolationException.class})
+    public ResponseEntity<Object> handlerSQLIntegrityConstraintViolationException(SQLIntegrityConstraintViolationException exception, WebRequest request) {
+        Object[] args = {exception.getMessage()};
+        return handlerException(exception, HttpStatus.BAD_REQUEST, request, "VIOLATION_CONSTRAINT", args);
+    }
+
+    @ExceptionHandler({DataIntegrityViolationException.class})
+    public ResponseEntity<Object> handlerSQLIntegrityConstraintViolationException(DataIntegrityViolationException exception, WebRequest request) {
+        Object[] args = {exception.getMessage()};
+        return handlerException(exception, HttpStatus.BAD_REQUEST, request, "VIOLATION_DATA_INTEGRITY", args);
     }
 
     private ResponseEntity<Object> handlerException(Exception exception, HttpStatus status, WebRequest request, String key, Object[] args) {
