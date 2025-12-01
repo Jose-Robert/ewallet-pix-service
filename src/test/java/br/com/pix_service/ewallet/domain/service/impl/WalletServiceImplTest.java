@@ -45,7 +45,6 @@ class WalletServiceImplTest {
         ReflectionTestUtils.setField(walletService, "transactionService", transactionService);
     }
 
-
     @Test
     @DisplayName("Deve abrir uma nova carteira com sucesso")
     void testOpenWallet() {
@@ -66,7 +65,6 @@ class WalletServiceImplTest {
         );
     }
 
-
     @Test
     @DisplayName("Deve registrar chave EMAIL/PHONE/EVP")
     void testRegisterPixKey() {
@@ -82,7 +80,6 @@ class WalletServiceImplTest {
                 () -> assertEquals("83996154232", response.getPixKey())
         );
     }
-
 
     @Test
     @DisplayName("Deve realizar um deposito em carteira - Credito")

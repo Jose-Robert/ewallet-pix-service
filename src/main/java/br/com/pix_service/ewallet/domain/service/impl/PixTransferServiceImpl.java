@@ -100,7 +100,7 @@ public class PixTransferServiceImpl implements IPixTransferService {
             return;
         }
 
-        executeRefund(webhookEvent, transaction);
+        this.executeRefund(webhookEvent, transaction);
         transactionService.updateTransactionStatus(webhookEvent.getEndToEndId(), webhookEvent.getEventType(), webhookEvent.getOccurredAt());
     }
 
