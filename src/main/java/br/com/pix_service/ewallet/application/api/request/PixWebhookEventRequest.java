@@ -25,7 +25,7 @@ public class PixWebhookEventRequest implements Serializable {
     @Schema(description = "Identificador do evento de webhook", example = "EVT-20240615143000")
     private String eventId;
 
-    @Schema(description = "Tipo do evento de webhook", example = "PAYMENT_RECEIVED")
+    @Schema(description = "Tipo do evento de webhook", example = "CONFIRMED | REJECTED")
     private String eventType;
 
     @Schema(description = "Timestamp de quando o evento ocorreu", example = "2024-06-15T14:30:00Z")
